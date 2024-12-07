@@ -2,6 +2,7 @@ import { getCelebrity } from '@/lib/celebrities';
 import { notFound } from 'next/navigation';
 import ProfileHeader from '@/components/celebrities/profile-header';
 import BiographySection from '@/components/celebrities/biography-section';
+import { getAllCelebrities } from '@/lib/celebrities'; // Adjust the import path as necessary
 
 interface CelebrityPageProps {
   params: {
@@ -24,4 +25,12 @@ export default function CelebrityPage({ params }: CelebrityPageProps) {
       </div>
     </div>
   );
+}
+
+// This function generates the static params (paths) for dynamic routes
+export function generateStaticParams() {
+  const celebrities = getAllCelebrities();
+  return celebrities.map((celebrity) => ({
+    slug: celebrity.slug, // For each celebrity, return the corresponding slug
+  }));
 }

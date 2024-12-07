@@ -40,3 +40,11 @@ export default function CelebritiesPage() {
     </div>
   );
 }
+
+// This function is required for static generation with dynamic routes
+export function generateStaticParams() {
+  const celebrities = getAllCelebrities(); // Retrieve all celebrities
+  return celebrities.map((celebrity) => ({
+    slug: celebrity.slug, // Generate each slug for static generation
+  }));
+}
