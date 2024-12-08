@@ -175,7 +175,7 @@ export default function UsersPage() {
                   </Badge>
                 </TableCell>
                 <TableCell>
-                  <Badge variant={user.status === 'active' ? 'success' : 'destructive'}>
+                  <Badge variant={user.status === 'active' ? 'default' : 'destructive'}>
                     {user.status}
                   </Badge>
                 </TableCell>
