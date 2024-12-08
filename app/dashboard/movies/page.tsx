@@ -17,46 +17,37 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Plus, MoreHorizontal, Search, ArrowUpDown, Shield } from 'lucide-react';
+import { Plus, MoreHorizontal, Search, ArrowUpDown } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
-import { UserDialog } from '@/components/dashboard/dialogs/user-dialog';
+import { MovieDialog } from '@/components/dashboard/dialogs/movie-dialog';
 
-const users = [
+const movies = [
   {
     id: '1',
-    name: 'John Doe',
-    email: 'john@example.com',
-    role: 'admin',
-    status: 'active',
-    lastLogin: '2024-03-25 14:30',
-    avatar: 'JD',
+    title: 'The Latest Blockbuster',
+    genre: 'Action',
+    releaseDate: '2024',
+    status: 'Released',
+    rating: '4.5',
+    boxOffice: '$250M',
   },
   {
     id: '2',
-    name: 'Sarah Smith',
-    email: 'sarah@example.com',
-    role: 'editor',
-    status: 'active',
-    lastLogin: '2024-03-24 09:15',
-    avatar: 'SS',
-  },
-  {
-    id: '3',
-    name: 'Mike Johnson',
-    email: 'mike@example.com',
-    role: 'user',
-    status: 'inactive',
-    lastLogin: '2024-03-20 16:45',
-    avatar: 'MJ',
+    title: 'Upcoming Thriller',
+    genre: 'Thriller',
+    releaseDate: '2024',
+    status: 'Pre-production',
+    rating: 'N/A',
+    boxOffice: 'N/A',
   },
 ];
 
-export default function UsersPage() {
+export default function MoviesPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [sortField, setSortField] = useState<string | null>(null);
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [selectedUser, setSelectedUser] = useState<any>(null);
+  const [selectedMovie, setSelectedMovie] = useState<any>(null);
 
   const handleSort = (field: string) => {
     if (sortField === field) {
@@ -67,13 +58,13 @@ export default function UsersPage() {
     }
   };
 
-  const handleEdit = (user: any) => {
-    setSelectedUser(user);
+  const handleEdit = (movie: any) => {
+    setSelectedMovie(movie);
     setDialogOpen(true);
   };
 
   const handleCreate = () => {
-    setSelectedUser(null);
+    setSelectedMovie(null);
     setDialogOpen(true);
   };
 
@@ -82,35 +73,22 @@ export default function UsersPage() {
     setDialogOpen(false);
   };
 
-  const filteredUsers = users.filter(
-    (user) =>
-      user.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      user.email.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredMovies = movies.filter((movie) =>
+    movie.title.toLowerCase().includes(searchQuery.toLowerCase())
   );
-
-  const sortedUsers = [...filteredUsers].sort((a, b) => {
-    if (!sortField) return 0;
-    
-    const aValue = a[sortField as keyof typeof a];
-    const bValue = b[sortField as keyof typeof b];
-    
-    if (sortDirection === 'asc') {
-      return aValue > bValue ? 1 : -1;
-    } else {
-      return aValue < bValue ? 1 : -1;
-    }
-  });
 
   return (
     <div className="space-y-4">
       <div className="flex justify-between items-center">
         <div>
-          <h2 className="text-3xl font-bold tracking-tight">Users</h2>
-          <p className="text-muted-foreground">Manage user accounts and permissions</p>
+          <h2 className="text-3xl font-bold tracking-tight">Movies</h2>
+          <p className="text-muted-foreground">
+            Manage movie listings and information
+          </p>
         </div>
         <Button onClick={handleCreate}>
           <Plus className="mr-2 h-4 w-4" />
-          Add User
+          Add Movie
         </Button>
       </div>
 
@@ -118,7 +96,7 @@ export default function UsersPage() {
         <div className="relative flex-1 max-w-sm">
           <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
           <Input
-            placeholder="Search users..."
+            placeholder="Search movies..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="pl-8"
@@ -130,21 +108,21 @@ export default function UsersPage() {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead onClick={() => handleSort('name')} className="cursor-pointer">
+              <TableHead onClick={() => handleSort('title')} className="cursor-pointer">
                 <div className="flex items-center space-x-1">
-                  <span>Name</span>
+                  <span>Title</span>
                   <ArrowUpDown className="h-4 w-4" />
                 </div>
               </TableHead>
-              <TableHead onClick={() => handleSort('email')} className="cursor-pointer">
+              <TableHead onClick={() => handleSort('genre')} className="cursor-pointer">
                 <div className="flex items-center space-x-1">
-                  <span>Email</span>
+                  <span>Genre</span>
                   <ArrowUpDown className="h-4 w-4" />
                 </div>
               </TableHead>
-              <TableHead onClick={() => handleSort('role')} className="cursor-pointer">
+              <TableHead onClick={() => handleSort('releaseDate')} className="cursor-pointer">
                 <div className="flex items-center space-x-1">
-                  <span>Role</span>
+                  <span>Release Date</span>
                   <ArrowUpDown className="h-4 w-4" />
                 </div>
               </TableHead>
@@ -154,9 +132,15 @@ export default function UsersPage() {
                   <ArrowUpDown className="h-4 w-4" />
                 </div>
               </TableHead>
-              <TableHead onClick={() => handleSort('lastLogin')} className="cursor-pointer">
+              <TableHead onClick={() => handleSort('rating')} className="cursor-pointer">
                 <div className="flex items-center space-x-1">
-                  <span>Last Login</span>
+                  <span>Rating</span>
+                  <ArrowUpDown className="h-4 w-4" />
+                </div>
+              </TableHead>
+              <TableHead onClick={() => handleSort('boxOffice')} className="cursor-pointer">
+                <div className="flex items-center space-x-1">
+                  <span>Box Office</span>
                   <ArrowUpDown className="h-4 w-4" />
                 </div>
               </TableHead>
@@ -164,22 +148,18 @@ export default function UsersPage() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {sortedUsers.map((user) => (
-              <TableRow key={user.id}>
-                <TableCell className="font-medium">{user.name}</TableCell>
-                <TableCell>{user.email}</TableCell>
+            {filteredMovies.map((movie) => (
+              <TableRow key={movie.id}>
+                <TableCell className="font-medium">{movie.title}</TableCell>
+                <TableCell>{movie.genre}</TableCell>
+                <TableCell>{movie.releaseDate}</TableCell>
                 <TableCell>
-                  <Badge variant={user.role === 'admin' ? 'default' : 'secondary'}>
-                    <Shield className="w-3 h-3 mr-1" />
-                    {user.role}
+                  <Badge variant={movie.status === 'Released' ? 'default' : 'secondary'}>
+                    {movie.status}
                   </Badge>
                 </TableCell>
-                <TableCell>
-                  <Badge variant={user.status === 'active' ? 'success' : 'destructive'}>
-                    {user.status}
-                  </Badge>
-                </TableCell>
-                <TableCell>{user.lastLogin}</TableCell>
+                <TableCell>{movie.rating}</TableCell>
+                <TableCell>{movie.boxOffice}</TableCell>
                 <TableCell>
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
@@ -188,11 +168,12 @@ export default function UsersPage() {
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
-                      <DropdownMenuItem onClick={() => handleEdit(user)}>
+                      <DropdownMenuItem onClick={() => handleEdit(movie)}>
                         Edit
                       </DropdownMenuItem>
+                      <DropdownMenuItem>View Details</DropdownMenuItem>
                       <DropdownMenuItem className="text-destructive">
-                        Deactivate
+                        Delete
                       </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
@@ -203,10 +184,10 @@ export default function UsersPage() {
         </Table>
       </div>
 
-      <UserDialog
+      <MovieDialog
         open={dialogOpen}
         onOpenChange={setDialogOpen}
-        user={selectedUser}
+        movie={selectedMovie}
         onSubmit={handleSubmit}
       />
     </div>
